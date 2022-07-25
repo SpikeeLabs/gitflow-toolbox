@@ -1,0 +1,13 @@
+name: lint-hadolint
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hadolint/hadolint-action@v2.0.0
+        with:
+          dockerfile: Dockerfile
