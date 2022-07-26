@@ -13,5 +13,4 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . /app/
 
-ENTRYPOINT ["python"]
-CMD ["gitflow_toolbox/sample.py", "1", "1"]
+ENTRYPOINT ["python", "main.py"]
