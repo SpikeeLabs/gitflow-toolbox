@@ -157,7 +157,7 @@ pyflakes = ">=2.3.0,<2.4.0"
 name = "gitdb"
 version = "4.0.9"
 description = "Git Object Database"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -168,7 +168,7 @@ smmap = ">=3.0.1,<6"
 name = "gitpython"
 version = "3.1.27"
 description = "GitPython is a python library used to interact with Git repositories"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -427,7 +427,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "smmap"
 version = "5.0.0"
 description = "A pure Python implementation of a sliding window memory map manager"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -532,7 +532,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9.0,<4"
-content-hash = "420f3aa03fababe5a908f1734896da68913d5e2841eb1aa198f5adcdacfa28dd"
+content-hash = "8e6747688a4cc94399360efc0b80670ae1b5afed7fcbb058418054beb2a7b470"
 
 [metadata.files]
 astroid = []
