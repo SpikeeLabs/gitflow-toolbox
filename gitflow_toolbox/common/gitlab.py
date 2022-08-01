@@ -1,4 +1,5 @@
 import os
+import re
 
 import gitlab
 from gitlab.v4.objects.projects import Project
@@ -10,15 +11,11 @@ from gitflow_toolbox.common.singleton import Singleton
 class CurrentGitlab(gitlab.Gitlab, metaclass=Singleton):
 
     __project = None
+    __private_token = None
 
     def __init__(self):
-        # If running in a gitlab CI job
-        if os.getenv("GITLAB_CI"):
-            # Use provided token, if not available, use default token from job
-            private_token = get_env("GITLAB_PRIVATE_TOKEN", "CI_JOB_TOKEN")
-            super().__init__(get_env("CI_SERVER_URL"), private_token)
-        else:
-            super().__init__(get_env("GITLAB_URL"), get_env("GITLAB_PRIVATE_TOKEN"))
+        self.__private_token = get_env("GITLAB_PRIVATE_TOKEN", "CI_JOB_TOKEN")
+        super().__init__(get_env("GITLAB_URL", "CI_SERVER_URL"), self.__private_token)
 
     @property
     def project(self) -> Project:
@@ -37,13 +34,21 @@ class CurrentGitlab(gitlab.Gitlab, metaclass=Singleton):
             self.__project = self.projects.get(get_env("GITLAB_PROJECT_ID"))
         return self.__project
 
+    @property
+    def project_authenticated_url(self) -> str:
+        return re.sub(
+            r"^https?:\/\/", f"https://gitflow:{self.__private_token}@", self.project.attributes.get("http_url_to_repo")
+        )
+
 
 class RemoteGitlab(gitlab.Gitlab, metaclass=Singleton):
 
     __project = None
+    __private_token = None
 
     def __init__(self):
-        super().__init__(get_env("REMOTE_GITLAB_URL"), get_env("REMOTE_GITLAB_PRIVATE_TOKEN"))
+        self.__private_token = get_env("REMOTE_GITLAB_PRIVATE_TOKEN", "GITLAB_PRIVATE_TOKEN", "CI_JOB_TOKEN")
+        super().__init__(get_env("REMOTE_GITLAB_URL", "GITLAB_URL", "CI_SERVER_URL"), self.__private_token)
 
     @property
     def project(self) -> Project:
@@ -53,5 +58,13 @@ class RemoteGitlab(gitlab.Gitlab, metaclass=Singleton):
             gitlab.Gitlab: remote gitlab project instance (or 'target', 'destination' gitlab project)
         """
         if not self.__project:
-            self.__project = self.projects.get(get_env("REMOTE_GITLAB_PROJECT_ID"))
+            self.__project = self.projects.get(
+                get_env("REMOTE_GITLAB_PROJECT_ID", "GITLAB_PROJECT_ID", "CI_PROJECT_ID")
+            )
         return self.__project
+
+    @property
+    def project_authenticated_url(self) -> str:
+        return re.sub(
+            r"^https?:\/\/", f"https://gitflow:{self.__private_token}@", self.project.attributes.get("http_url_to_repo")
+        )
