@@ -1,4 +1,4 @@
-const scope = ["gitlab", "git"];
+const scope = ["gitlab", "git", "docker"];
 
 module.exports = {
   extends: ["@commitlint/config-angular"],
