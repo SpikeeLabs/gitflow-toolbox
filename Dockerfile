@@ -13,6 +13,6 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . /app/
 
-RUN echo 'alias gitflow="python /app/main.py"' >> ~/.bashrc
+RUN chmod +x /app/scripts/* && cp /app/scripts/* /usr/local/bin
 
 ENTRYPOINT ["python", "main.py"]
