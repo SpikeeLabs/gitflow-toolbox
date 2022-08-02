@@ -1,0 +1,40 @@
+# Specific files/folder
+.cache
+.coverage
+.coveragerc
+.dockerignore
+.git
+.gitignore
+.gitlab-ci.yml
+.noserc
+.venv/
+.idea
+.vscode
+htmlcov
+sonar-project.properties
+**/tests/**
+*.egg-info
+.flake8
+docs/
+devops/
+tmp/
+.gitlab/
+.releaserc.json$
+README.rst
+sonar-project.properties
+pylama.ini
+openapi.yml
+cov.xml
+commitlint.config.js
+codespellrc
+CHANGELOG.md
+celerybeat-schedule.db
+.pre-commit-config.yaml
+.gitlab-ci.yml
+.coverage
+public
+*/__pycache__/
+# Ignore all markdown file
+*.md
+# Ignore all *.pyc files in all folders, including build root
+**/*.pyc
