@@ -16,6 +16,9 @@ def check_branch_exists(ctx: click.Context, remote: bool, branch: str):
     Args:
         remote (bool): whether to check on the current gitlab or remote gitlab (True=remote)
         branch (str): branch name
+
+    Returns:
+        bool: True if branch exists (exit code 0), False otherwise (exit code 1)
     """
     click.echo(f"Checking if {branch} branch exists...")
     project = RemoteGitlab().project if remote else CurrentGitlab().project
