@@ -17,6 +17,9 @@ repos:
     rev: 0.1.2
     hooks:
       - id: pylama
+        # to remove when this is fixed https://github.com/klen/pylama/issues/224
+        additional_dependencies:
+          - pyflakes==2.4.0
 
   - repo: https://github.com/pycqa/isort
     rev: 5.5.2
