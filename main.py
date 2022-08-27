@@ -9,6 +9,7 @@ from gitflow_toolbox.ensure_mr import ensure_mr
 from gitflow_toolbox.get_project_http_url import get_project_http_url
 from gitflow_toolbox.get_project_ssh_url import get_project_ssh_url
 from gitflow_toolbox.push import push
+from gitflow_toolbox.push_missing_tags import push_missing_tags
 
 load_dotenv()
 
@@ -25,6 +26,7 @@ cli.add_command(ensure_mr)
 cli.add_command(get_project_ssh_url)
 cli.add_command(get_project_http_url)
 cli.add_command(push)
+cli.add_command(push_missing_tags)
 cli.add_command(diff)
 
 if __name__ == "__main__":
