@@ -5,17 +5,24 @@ from gitflow_toolbox.common.gitlab import CurrentGitlab, RemoteGitlab
 
 
 @click.command()
-@click.option("--remote/--current", default=False)
 @click.argument("branch", type=str)
 @click.argument("ref", type=str)
+@click.option(
+    "--remote/--current",
+    "-r/-c",
+    default=False,
+    help="Flag which allow you to chose between configured target or remote to run this tool."
+    " By default, the script use --current flag.",
+)
 @click.pass_context
-def ensure_branch(ctx: click.Context, remote: bool, branch: str, ref: str):
-    """Creates a branch if doesn't exist
+def ensure_branch(ctx: click.Context, branch: str, ref: str, remote: bool = False):
+    """Creates the branch BRANCH using branch REF if the target doesn't exist\f
 
     Args:
-        remote (bool): whether to check on the current gitlab or remote gitlab (True=remote)
         branch (str): branch name
         ref (str): branch to create branch from
+        remote (bool, optional):
+            whether to check on the current gitlab or remote gitlab (True=remote). Default to False.
     """
 
     branch_exists = ctx.invoke(check_branch_exists, remote=remote, branch=branch)
