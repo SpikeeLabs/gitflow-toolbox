@@ -6,6 +6,7 @@ from gitflow_toolbox.common.gitlab import CurrentGitlab, RemoteGitlab
 
 @click.command()
 @click.option("--remote/--current", default=False)
+@click.option("--keep-source-branch", is_flag=True)
 @click.argument("source_branch", type=str)
 @click.argument("target_branch", type=str)
 @click.argument("title", type=str)
@@ -15,6 +16,7 @@ from gitflow_toolbox.common.gitlab import CurrentGitlab, RemoteGitlab
 def ensure_mr(
     ctx: click.Context,
     remote: bool,
+    keep_source_branch: bool,
     source_branch: str,
     target_branch: str,
     title: str,
@@ -25,6 +27,7 @@ def ensure_mr(
 
     Args:
         remote (bool): whether to check on the current gitlab or remote gitlab (True=remote)
+        keep_source_branch (bool): if you want to keep source branch or not
         source_branch (str): branch to create
         target_branch (str): branch reference to create branch from
         title (str): MR title
@@ -46,6 +49,7 @@ def ensure_mr(
             "title": title,
             "description": description,
             "labels": list(labels),
+            "remove_source_branch": not keep_source_branch,
         }
     )
     click.echo(f"✨ Successfully created MR #{created_mr.iid} : {created_mr.web_url}")
