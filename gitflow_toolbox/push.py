@@ -11,29 +11,43 @@ from gitflow_toolbox.get_project_http_url import get_project_http_url
 
 
 @click.command()
-@click.option("--from-gitlab", type=click.Choice(["current", "remote"], case_sensitive=False))
 @click.argument("source_branch", type=str)
-@click.option("--to-gitlab", type=click.Choice(["current", "remote"], case_sensitive=False))
 @click.argument("target_branch", type=str)
-@click.option("--force", is_flag=True, type=bool)
+@click.option(
+    "--from-gitlab",
+    "-f",
+    type=click.Choice(["current", "remote"], case_sensitive=False),
+    help="Flag which allow you to chose between the current gitlab or the remote gitlab for the FROM role."
+    " Defaults to 'remote'.",
+)
+@click.option(
+    "--to-gitlab",
+    "-t",
+    type=click.Choice(["current", "remote"], case_sensitive=False),
+    help="Flag which allow you to chose between the current gitlab or the remote gitlab for the TO role."
+    " Defaults to 'remote'.",
+)
+@click.option("--force", "-f", is_flag=True, type=bool, help="Flag to enable force push")
 @click.pass_context
 def push(
     ctx: click.Context,
-    from_gitlab: tuple[str],
     source_branch: str,
-    to_gitlab: tuple[str],
     target_branch: str,
-    force: bool,
+    from_gitlab: str = "remote",
+    to_gitlab: str = "remote",
+    force: bool = False,
 ):
-    """Push commits from a branch to another branch
+    """Push commits from SOURCE_BRANCH to TARGET_BRANCH\f
 
     Args:
-        from_gitlab (str): source gitlab [current/remote]
         source_branch (str): source branch
-        to_gitlab (str): destination gitlab [current/remote]
         target_branch (str): destination branch
-        force (bool): whether to force push (default: False)
+        from_gitlab (str, optional): source gitlab [current/remote]. Defaults to 'remote'.
+        to_gitlab (str, optional): destination gitlab [current/remote]. Defaults to 'remote'.
+        force (bool, optional): whether to force push. Defaults to False.
     """
+    to_gitlab = to_gitlab.lower()
+    from_gitlab = from_gitlab.lower()
 
     gitlab_from = CurrentGitlab() if from_gitlab == "current" else RemoteGitlab()
     gitlab_to = CurrentGitlab() if to_gitlab == "current" else RemoteGitlab()
