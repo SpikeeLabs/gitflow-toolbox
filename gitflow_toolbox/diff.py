@@ -10,25 +10,37 @@ from gitflow_toolbox.common.is_main_call import is_main_call
 
 
 @click.command()
-@click.option("--from-gitlab", type=click.Choice(["current", "remote"], case_sensitive=False))
 @click.argument("source_branch", type=str)
-@click.option("--to-gitlab", type=click.Choice(["current", "remote"], case_sensitive=False))
 @click.argument("target_branch", type=str)
+@click.option(
+    "--from-gitlab",
+    "-f",
+    type=click.Choice(["current", "remote"], case_sensitive=False),
+    help="Flag which allow you to chose between the current gitlab or the remote gitlab for the FROM role of the diff."
+    " Defaults to 'remote'.",
+)
+@click.option(
+    "--to-gitlab",
+    "-t",
+    type=click.Choice(["current", "remote"], case_sensitive=False),
+    help="Flag which allow you to chose between the current gitlab or the remote gitlab for the TO role of the diff."
+    " Defaults to 'remote'.",
+)
 @click.pass_context
 def diff(
     ctx: click.Context,
-    from_gitlab: tuple[str],
     source_branch: str,
-    to_gitlab: tuple[str],
     target_branch: str,
+    from_gitlab: str = "remote",
+    to_gitlab: str = "remote",
 ):
-    """Returns the 'git diff' between two branches
+    """Returns the 'git diff' between SOURCE_BRANCH and TARGET_BRANCH\f
 
     Args:
-        from_gitlab (str): source gitlab [current/remote]
         source_branch (str): source branch
-        to_gitlab (str): destination gitlab [current/remote]
         target_branch (str): destination branch
+        from_gitlab (str, optional): source gitlab [current/remote]. Defaults to "remote".
+        to_gitlab (str, optional): destination gitlab [current/remote]. Defaults to "remote".
 
     Returns:
         str: the 'git diff' between two branches, or an empty string (line return) if no diff

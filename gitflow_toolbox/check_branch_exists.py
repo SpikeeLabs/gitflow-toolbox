@@ -7,15 +7,25 @@ from gitflow_toolbox.common.is_main_call import is_main_call
 
 
 @click.command()
-@click.option("--remote/--current", default=False)
 @click.argument("branch", type=str)
+@click.option(
+    "--remote/--current",
+    "-r/-c",
+    default=False,
+    help="Flag which allow you to chose between configured target or remote to run this tool."
+    " By default, the script use --current flag.",
+)
 @click.pass_context
-def check_branch_exists(ctx: click.Context, remote: bool, branch: str):
-    """Checks if a branch exists
+def check_branch_exists(ctx: click.Context, branch: str, remote: bool = False):
+    """Checks if the given BRANCH exists
+
+    Return True if a branch exists (exit code 0), False otherwise (exit code 1)
+    \f
 
     Args:
-        remote (bool): whether to check on the current gitlab or remote gitlab (True=remote)
         branch (str): branch name
+        remote (bool, optional):
+            whether to check on the current gitlab or remote gitlab (True=remote). Default to False.
 
     Returns:
         bool: True if branch exists (exit code 0), False otherwise (exit code 1)
