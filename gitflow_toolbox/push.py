@@ -15,7 +15,6 @@ from gitflow_toolbox.get_project_http_url import get_project_http_url
 @click.argument("target_branch", type=str)
 @click.option(
     "--from-gitlab",
-    "-f",
     type=click.Choice(["current", "remote"], case_sensitive=False),
     help="Flag which allow you to chose between the current gitlab or the remote gitlab for the FROM role."
     " Defaults to 'remote'.",
@@ -46,8 +45,8 @@ def push(
         to_gitlab (str, optional): destination gitlab [current/remote]. Defaults to 'remote'.
         force (bool, optional): whether to force push. Defaults to False.
     """
-    to_gitlab = to_gitlab.lower()
-    from_gitlab = from_gitlab.lower()
+    to_gitlab = (to_gitlab or "remote").lower()
+    from_gitlab = (from_gitlab or "remote").lower()
 
     gitlab_from = CurrentGitlab() if from_gitlab == "current" else RemoteGitlab()
     gitlab_to = CurrentGitlab() if to_gitlab == "current" else RemoteGitlab()
@@ -77,7 +76,8 @@ def push(
         click.echo(f"✨ Successfully pushed {from_gitlab} {source_branch} into {to_gitlab} {target_branch}")
 
     finally:
-        # Clean
+        # Clean created directory by git lib during clone_from
         if os.path.isdir(project_from_clone_dir):
-            click.echo(f"Removing cache {project_from_clone_dir}")
-            shutil.rmtree(project_from_clone_dir)
+            # These lines aren't tested by unit test because git doesn't impact file-system (mocked)
+            click.echo(f"Removing cache {project_from_clone_dir}")  # pragma: no cover
+            shutil.rmtree(project_from_clone_dir)  # pragma: no cover
