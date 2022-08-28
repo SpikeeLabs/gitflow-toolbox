@@ -65,6 +65,7 @@ def diff(
             click.echo(diff_output)
         return diff_output
     finally:
-        # Clean
+        # Clean created directory by git lib during clone_from
         if os.path.isdir(project_from_clone_dir):
-            shutil.rmtree(project_from_clone_dir)
+            # These lines aren't tested by unit test because git doesn't impact file-system (mocked)
+            shutil.rmtree(project_from_clone_dir)  # pragma: no cover

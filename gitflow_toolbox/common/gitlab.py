@@ -30,8 +30,10 @@ class CurrentGitlab(gitlab.Gitlab, metaclass=Singleton):
                 # Use provided CI project, if not available, use project from current job
                 project_id = get_env("GITLAB_PROJECT_ID", "CI_PROJECT_ID")
                 self.__project = self.projects.get(project_id)
+                return self.__project
 
-            self.__project = self.projects.get(get_env("GITLAB_PROJECT_ID"))
+            # This line isn't covered by unit test to simplify singleton handling.
+            self.__project = self.projects.get(get_env("GITLAB_PROJECT_ID"))  # pragma: no cover
         return self.__project
 
     @property
