@@ -1,6 +1,5 @@
 import os
 import shutil
-import sys
 import uuid
 
 import click
@@ -37,8 +36,8 @@ def push_missing_tags(
         from_gitlab (str, optional): source gitlab [current/remote]. Defaults to 'remote'.
         to_gitlab (str, optional): destination gitlab [current/remote]. Defaults to 'remote'.
     """
-    to_gitlab = to_gitlab.lower()
-    from_gitlab = from_gitlab.lower()
+    to_gitlab = (to_gitlab or "remote").lower()
+    from_gitlab = (from_gitlab or "remote").lower()
 
     gitlab_from = CurrentGitlab() if from_gitlab == "current" else RemoteGitlab()
     gitlab_to = CurrentGitlab() if to_gitlab == "current" else RemoteGitlab()
@@ -68,19 +67,15 @@ def push_missing_tags(
         # Push missing tags from target to source
         for item in source_tags - target_tags:
             click.echo(f"Pushing {from_gitlab} {item.name} into {to_gitlab} ...")
-            changes = repo_from.remotes.target.push(item)
-            for change in changes:
-                click.echo(change.summary)
-                if "rejected" in change.summary:
-                    click.echo(f"❌ Couldn't push {item.name} to {to_gitlab}")
-                    sys.exit(1)
-            click.echo(f"✨ Successfully pushed {from_gitlab} tags into {to_gitlab}")
+            repo_from.remotes.target.push(item)
+            click.echo(f"✨ Successfully pushed {from_gitlab} {item.name} tags into {to_gitlab}")
 
     finally:
-        # Clean
+        # Clean created directory by git lib during clone_from
+        # These lines aren't tested by unit test because git doesn't impact file-system (mocked)
         if os.path.isdir(project_from_clone_dir):
-            click.echo(f"Removing cache {project_from_clone_dir}")
-            shutil.rmtree(project_from_clone_dir)
+            click.echo(f"Removing cache {project_from_clone_dir}")  # pragma: no cover
+            shutil.rmtree(project_from_clone_dir)  # pragma: no cover
         if os.path.isdir(project_to_clone_dir):
-            click.echo(f"Removing cache {project_to_clone_dir}")
-            shutil.rmtree(project_to_clone_dir)
+            click.echo(f"Removing cache {project_to_clone_dir}")  # pragma: no cover
+            shutil.rmtree(project_to_clone_dir)  # pragma: no cover
