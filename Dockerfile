@@ -27,15 +27,15 @@ RUN apt-get update \
     && apt-get --no-install-recommends install -y curl=7.64.0-4+deb10u2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+    && curl -sSL https://install.python-poetry.org | python
 
-ENV PATH="${PATH}:/root/.poetry/bin"
+ENV PATH="${PATH}:/root/.local/bin"
 
 
 COPY pyproject.toml poetry.lock ./
 
 # install deps
-RUN poetry install --no-dev --no-root
+RUN poetry install --only main --no-root
 
 
 # Prod
