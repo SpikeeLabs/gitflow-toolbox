@@ -24,7 +24,7 @@ FROM python-base as builder-base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update \
-    && apt-get --no-install-recommends install -y curl=7.64.0-4+deb10u2 \
+    && apt-get --no-install-recommends install -y curl=7.64.0-4+deb10u3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && curl -sSL https://install.python-poetry.org | python
