@@ -15,7 +15,7 @@ python = ">=3.9.0,<4"
 
 GitPython = "^3.1"
 click = "^8.1"
-python-dotenv = "^0.20"
+python-dotenv = "^0.21.0"
 python-gitlab = "^3.6"
 
 [tool.poetry.dev-dependencies]
