@@ -23,4 +23,4 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
         run: poetry install
-      - uses: pre-commit/action@v3.0.0
+      - uses: pre-commit/action@v3.0.1
